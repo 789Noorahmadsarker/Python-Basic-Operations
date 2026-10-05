@@ -1,0 +1,59 @@
+# ---------------------------------------------------------------
+# PURPOSE:
+# This program reads batting data from a CSV file ("scores.csv"),
+# groups the scores by player, and then prints the total runs and
+# average runs for each batter (rohit, shakib, and babar).
+# ---------------------------------------------------------------
+
+# Open the CSV file (by default, in read mode)
+s = open("scores.csv")
+
+# Read the entire file content as one single string
+x = s.read()
+
+# Dictionary to store each player's scores.
+# Format -> {"player_name": [score1, score2, score3, ...]}
+my_dict = {}
+
+# An empty list (it is created here but never used later in the code)
+run_lst = []
+
+# Split the file content into a list of lines.
+# Each line (e.g. "rohit,match1,120") becomes one item in the list.
+x_lst = x.split("\n")
+
+# Remove the last item of the list. The file ends with a newline,
+# so splitting leaves an empty string "" at the end.
+x_lst.pop(len(x_lst)-1)
+
+# Loop through every line of data
+for i in x_lst:
+  # Split the line by commas into 3 parts.
+  # player = player's name, _ = the middle column (ignored), score = runs scored
+  player,_,score = i.split(",")
+
+  # If the player already exists in the dictionary,
+  # add this new score to their existing list of scores
+  if player in my_dict:
+    my_dict[player].append(int(score))   # int() converts the text score into a number
+  # Otherwise, this is the player's first entry,
+  # so create a new list containing their first score
+  else:
+    my_dict[player] = [int(score)]
+
+# Loop through the dictionary: i = player name, j = list of that player's scores
+for i,j in my_dict.items():
+  # sum(j) adds up all the scores to get the total runs
+  print(f"Total Runs of {i} is {sum(j)}")
+  # Total divided by the number of matches (len(j)) gives the average
+  print(f"Average Runs of {i} is {sum(j)/len(j)}")
+
+# ---------------------------------------------------------------
+# SAMPLE OUTPUT:
+# Total Runs of rohit is 504
+# Average Runs of rohit is 100.8
+# Total Runs of shakib is 308
+# Average Runs of shakib is 77.0
+# Total Runs of babar is 293
+# Average Runs of babar is 58.6
+# ---------------------------------------------------------------
